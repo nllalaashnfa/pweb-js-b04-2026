@@ -7,7 +7,8 @@ const tombolMasuk = document.getElementById("tombol-masuk");
 const statusLogin = document.getElementById("status-login");
 
 function tampilLoading() {
-  statusLogin.innerHTML = "<div class='pesan loading'><span class='spinner'></span>Memverifikasi akun...</div>";
+  statusLogin.innerHTML =
+    "<div class='pesan loading'><span class='spinner'></span>Memverifikasi akun...</div>";
   tombolMasuk.disabled = true;
   tombolMasuk.textContent = "Memeriksa...";
 }
@@ -18,28 +19,40 @@ function tampilError(pesan) {
   tombolMasuk.textContent = "Masuk";
 }
 
+function bersihkanStatus() {
+  statusLogin.innerHTML = "";
+}
+
 async function prosesLogin(username, password) {
   tampilLoading();
-
   try {
     const respon = await fetch(URL_USERS);
+
     if (!respon.ok) {
       throw new Error(`Gagal memuat data pengguna! Status: ${respon.status}`);
     }
 
     const data = await respon.json();
+    const daftarUser = data.users || [];
 
-    const userCocok = data.users.filter(
-      (user) => user.username === username && user.password === password
-    );
+    // 1. Cek apakah username terdaftar di API
+    const userDitemukan = daftarUser.find((user) => user.username === username);
 
-    if (userCocok.length === 0) {
-      tampilError("Username atau password salah. Periksa lagi lalu coba masuk kembali.");
+    if (!userDitemukan) {
+      tampilError("Username invalid!");
       return;
     }
 
-    localStorage.setItem("firstName", userCocok[0].firstName);
-    window.location.href = "index.html";
+    // 2. Cek apakah password sesuai dengan username tersebut
+    if (userDitemukan.password !== password) {
+      tampilError("Password incorrect!");
+      return;
+    }
+
+    // 3. Jika sesuai, simpan sesi dan arahkan ke catalog.html
+    bersihkanStatus();
+    localStorage.setItem("firstName", userDitemukan.firstName);
+    window.location.assign("catalog.html");
   } catch (error) {
     console.error("Terjadi kesalahan:", error);
     tampilError("Gagal terhubung ke server. Periksa koneksi internetmu lalu coba lagi.");
@@ -59,3 +72,8 @@ formLogin.addEventListener("submit", (e) => {
 
   prosesLogin(username, password);
 });
+
+// Kalau sudah pernah login (ada sesi tersimpan), langsung arahkan ke katalog
+if (localStorage.getItem("firstName")) {
+  window.location.replace("catalog.html");
+}

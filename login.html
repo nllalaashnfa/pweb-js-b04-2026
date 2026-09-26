@@ -1,32 +1,30 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Masuk - Mini Shopee</title>
-  <link rel="stylesheet" href="login.css">
-  <script src="login.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masuk - Mini E Commerce</title>
+<link rel="stylesheet" href="login.css">
+<script src="login.js" defer></script>
 </head>
 <body>
+  <div class="halaman-login">
+    <div class="kartu-login">
+      <h1>Selamat Datang</h1>
+      <p class="subjudul">Masuk untuk melanjutkan belanja di Mini E Commerce</p>
 
-  <main class="halaman-login">
-    <section class="kartu-login">
-      <h1>Masuk ke akunmu</h1>
-      <p class="subjudul">Gunakan username &amp; password akunmu.</p>
-
-      <form id="form-login">
+      <form id="form-login" novalidate>
         <label for="input-username">Username</label>
-        <input type="text" id="input-username" autocomplete="username">
+        <input type="text" id="input-username" name="username" placeholder="Masukkan username" autocomplete="username">
 
         <label for="input-password">Password</label>
-        <input type="password" id="input-password" autocomplete="current-password">
+        <input type="password" id="input-password" name="password" placeholder="Masukkan password" autocomplete="current-password">
 
         <div id="status-login"></div>
 
         <button type="submit" id="tombol-masuk">Masuk</button>
       </form>
-    </section>
-  </main>
-
+    </div>
+  </div>
 </body>
 </html>

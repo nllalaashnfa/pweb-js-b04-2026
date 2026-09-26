@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Katalog Produk E Commerce</title>
+<link rel="stylesheet" href="catalog.css">
+<script src="catalog.js" defer></script>
+</head>
+<body>
+
+  <!-- Overlay loading halaman -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="loading-box">
+      <span class="spinner-besar"></span>
+      <p>Loading...</p>
+    </div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <header>
+    <div class="navbar">
+      <div class="nav-brand">Mini E Commerce</div>
+      <div class="nav-user">
+        <span id="user-greeting" class="user-greeting">Memuat...</span>
+        <div class="avatar-lingkaran" aria-hidden="true">U</div>
+        <button id="btn-logout" class="btn-logout">Keluar</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Controls (Back, Search, Filter) -->
+    <div class="controls-bar">
+      <button id="btn-back" class="btn-back" title="Kembali ke semua produk">&larr;</button>
+
+      <div class="search-box">
+        <span class="ikon-cari">&#128269;</span>
+        <input type="text" id="input-search" placeholder="Cari produk...">
+      </div>
+
+      <button id="btn-filter" class="btn-filter">
+        <span class="ikon-filter">&#9881;</span>
+        <span class="teks-filter">filter</span>
+      </button>
+    </div>
+
+    <!-- Categories -->
+    <div class="categories-wrapper">
+      <div id="categories-bar" class="categories-bar">
+        <!-- Diisi dinamis lewat JavaScript -->
+      </div>
+    </div>
+
+    <!-- Product Grid Container -->
+    <div class="grid-scroller">
+      <div id="product-grid" class="product-grid">
+        <!-- Diisi secara dinamis lewat JavaScript -->
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div id="empty-state" class="empty-state hidden">
+      <div class="empty-emoji">&#128269;</div>
+      <h3>Tidak ada produk yang sesuai</h3>
+      <p>Coba kata kunci lain, atau lihat kategori yang berbeda.</p>
+    </div>
+
+  </main>
+
+  <!-- Popup Filter / Sort -->
+  <div id="popup-overlay" class="popup-overlay hidden">
+    <div class="popup-kartu">
+      <div class="popup-header">
+        <button id="btn-popup-back" class="btn-popup-back" title="Kembali">&larr;</button>
+        <h2>Urutkan produk</h2>
+      </div>
+
+      <div class="popup-body">
+        <div class="popup-group">
+          <label for="select-harga">Urutkan harga</label>
+          <select id="select-harga">
+            <option value="">Default</option>
+            <option value="asc">Termurah ke Termahal</option>
+            <option value="desc">Termahal ke Termurah</option>
+          </select>
+        </div>
+
+        <div class="popup-group">
+          <label>Urutkan rating minimum</label>
+          <div id="rating-tombol-grup" class="rating-tombol-grup">
+            <button type="button" class="rating-tombol" data-rating="1">1</button>
+            <button type="button" class="rating-tombol" data-rating="2">2</button>
+            <button type="button" class="rating-tombol" data-rating="3">3</button>
+            <button type="button" class="rating-tombol" data-rating="4">4</button>
+            <button type="button" class="rating-tombol" data-rating="5">5</button>
+          </div>
+        </div>
+      </div>
+
+      <button id="btn-terapkan" class="btn-terapkan">Terapkan</button>
+    </div>
+  </div>
+
+</body>
+</html>

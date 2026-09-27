@@ -20,7 +20,7 @@ body {
   background: var(--blush-muda);
 }
 
-/* ---------- Loading overlay ---------- */
+/* Loading overlay */
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -58,7 +58,7 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* ---------- Header ---------- */
+/* Header */
 header {
   background: var(--burgundy);
   position: sticky;
@@ -149,14 +149,14 @@ header {
   display: none;
 }
 
-/* ---------- Main layout ---------- */
+/* Main layout */
 main {
   max-width: 960px;
   margin: 0 auto;
   padding: 20px 20px 60px;
 }
 
-/* ---------- Controls bar ---------- */
+/* Controls bar */
 .controls-bar {
   display: flex;
   align-items: center;
@@ -229,7 +229,7 @@ main {
   background: var(--blush-muda);
 }
 
-/* ---------- Categories ---------- */
+/* Categories */
 .categories-wrapper {
   margin-bottom: 20px;
 }
@@ -280,7 +280,7 @@ main {
   font-weight: bold;
 }
 
-/* ---------- Product grid ---------- */
+/* Product grid */
 .grid-scroller {
   max-height: 640px;
   overflow-y: auto;
@@ -430,7 +430,7 @@ main {
   background: var(--burgundy-gelap);
 }
 
-/* ---------- Load More ---------- */
+/* Load More */
 .btn-muat-lagi {
   display: block;
   margin: 20px auto 0;
@@ -452,7 +452,7 @@ main {
   display: none;
 }
 
-/* ---------- Empty state ---------- */
+/* Empty state */
 .empty-state {
   text-align: center;
   padding: 60px 20px;
@@ -479,7 +479,7 @@ main {
   font-size: 13px;
 }
 
-/* ---------- Popup filter/sort ---------- */
+/* Popup filter/sort */
 .popup-overlay {
   position: fixed;
   inset: 0;
@@ -592,7 +592,7 @@ main {
   background: var(--burgundy-gelap);
 }
 
-/* ---------- Panel Keranjang ---------- */
+/* Panel Keranjang */
 .keranjang-kartu {
   max-height: 85vh;
   overflow-y: auto;
@@ -668,7 +668,7 @@ main {
   color: var(--burgundy);
 }
 
-/* ---------- Modal Detail Produk ---------- */
+/* Modal Detail Produk */
 .detail-kartu {
   max-height: 85vh;
   overflow-y: auto;

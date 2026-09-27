@@ -80,9 +80,7 @@ let jumlahDitampilkan = JUMLAH_PER_HALAMAN;
 
 const KUNCI_KERANJANG = "keranjang";
 
-// ============================================================
 // 0. Cek sesi login. Kalau tidak ada, balik ke halaman login.
-// ============================================================
 function cekSesi() {
   const firstName = localStorage.getItem("firstName");
   if (!firstName) {
@@ -98,9 +96,7 @@ btnLogout.addEventListener("click", () => {
   window.location.assign("login.html");
 });
 
-// ============================================================
 // 1. Closure + debounce untuk pencarian
-// ============================================================
 function buatDebounce(fungsi, jeda) {
   let timer = null;
   return function (...args) {
@@ -132,9 +128,7 @@ inputSearch.addEventListener("input", () => {
   }
 });
 
-// ============================================================
 // 2. Render blok kategori
-// ============================================================
 function renderKategori() {
   categoriesBar.innerHTML = "";
   DAFTAR_KATEGORI.forEach((kategori) => {
@@ -151,9 +145,7 @@ function renderKategori() {
   });
 }
 
-// ============================================================
 // 3. Pipeline filter: kategori + pencarian, lalu rating + urutan harga
-// ============================================================
 function terapkanFilterDasar() {
   let hasil = semuaProduk;
 
@@ -187,9 +179,7 @@ function terapkanUrutanDanRating() {
   renderHalamanSaatIni();
 }
 
-// ============================================================
 // 4. Render kartu produk
-// ============================================================
 function buatKartuProduk(produk) {
   const kartu = document.createElement("div");
   kartu.className = "kartu-produk";
@@ -239,9 +229,7 @@ function renderProduk(daftarProduk) {
   productGrid.appendChild(fragment);
 }
 
-// ============================================================
 // 4b. Load More (array slicing atas hasilSaatIni)
-// ============================================================
 function renderHalamanSaatIni() {
   renderProduk(hasilSaatIni.slice(0, jumlahDitampilkan));
 
@@ -257,9 +245,7 @@ btnMuatLagi.addEventListener("click", () => {
   renderHalamanSaatIni();
 });
 
-// ============================================================
 // 5. Tombol kembali ke tampilan produk lengkap
-// ============================================================
 btnBack.addEventListener("click", () => {
   kategoriAktif = "";
   kataKunciCari = "";
@@ -275,9 +261,7 @@ btnBack.addEventListener("click", () => {
   terapkanUrutanDanRating();
 });
 
-// ============================================================
 // 6. Popup urutkan / filter
-// ============================================================
 btnFilter.addEventListener("click", () => {
   popupOverlay.classList.remove("hidden");
 });
@@ -309,9 +293,7 @@ btnTerapkan.addEventListener("click", () => {
   popupOverlay.classList.add("hidden");
 });
 
-// ============================================================
 // 7. Ambil data produk dari API
-// ============================================================
 async function ambilProduk() {
   try {
     const respon = await fetch(URL_PRODUCTS);
@@ -338,9 +320,7 @@ async function ambilProduk() {
   }
 }
 
-// ============================================================
 // 8. Keranjang (Local Storage CRUD)
-// ============================================================
 function ambilKeranjang() {
   const data = localStorage.getItem(KUNCI_KERANJANG);
   return data ? JSON.parse(data) : [];
@@ -430,9 +410,7 @@ btnKeranjangBack.addEventListener("click", () => {
   keranjangOverlay.classList.add("hidden");
 });
 
-// ============================================================
 // 9. Modal Detail Produk (Event Delegation)
-// ============================================================
 function bukaDetailProduk(id) {
   const produk = semuaProduk.find((p) => p.id === id);
   if (!produk) return;
@@ -475,9 +453,7 @@ productGrid.addEventListener("click", (e) => {
   bukaDetailProduk(id);
 });
 
-// ============================================================
 // Inisialisasi
-// ============================================================
 (function init() {
   const firstName = cekSesi();
   if (!firstName) return;

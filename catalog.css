@@ -674,37 +674,52 @@ main {
   overflow-y: auto;
 }
 
-.detail-gambar {
+.detail-gambar-wrapper {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  height: 220px;
+  background: var(--blush-muda);
+  border: 3px solid var(--burgundy);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.detail-gambar {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 6px;
 }
 
 .detail-judul {
   margin: 6px 0 4px 0;
-  font-size: 16px;
+  font-size: 14px;
   color: var(--teks);
 }
 
 .detail-brand,
 .detail-stok {
   margin: 0 0 4px 0;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--teks-redup);
 }
 
 .detail-harga {
   margin: 6px 0;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bold;
   color: var(--burgundy);
 }
 
 .detail-deskripsi {
   margin: 10px 0 18px 0;
-  font-size: 13px;
+  font-size: 11px;
   line-height: 1.5;
   color: var(--teks);
 }

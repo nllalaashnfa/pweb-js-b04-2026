@@ -23,6 +23,9 @@
       <div class="nav-brand">Mini E Commerce</div>
       <div class="nav-user">
         <span id="user-greeting" class="user-greeting">Memuat...</span>
+        <button id="btn-keranjang" class="btn-keranjang" title="Keranjang">
+          &#128722;<span id="badge-keranjang" class="badge-keranjang hidden">0</span>
+        </button>
         <div class="avatar-lingkaran" aria-hidden="true">U</div>
         <button id="btn-logout" class="btn-logout">Keluar</button>
       </div>
@@ -60,6 +63,8 @@
         <!-- Diisi secara dinamis lewat JavaScript -->
       </div>
     </div>
+
+    <button id="btn-muat-lagi" class="btn-muat-lagi hidden">Muat Lebih Banyak</button>
 
     <!-- Empty state -->
     <div id="empty-state" class="empty-state hidden">
@@ -101,6 +106,38 @@
       </div>
 
       <button id="btn-terapkan" class="btn-terapkan">Terapkan</button>
+    </div>
+  </div>
+
+  <!-- Panel Keranjang -->
+  <div id="keranjang-overlay" class="popup-overlay hidden">
+    <div class="popup-kartu keranjang-kartu">
+      <div class="popup-header">
+        <button id="btn-keranjang-back" class="btn-popup-back" title="Kembali">&larr;</button>
+        <h2>Keranjang Belanja</h2>
+      </div>
+
+      <div id="daftar-keranjang" class="daftar-keranjang"></div>
+      <p class="total-keranjang">Total: <span id="total-keranjang-harga">$0.00</span></p>
+    </div>
+  </div>
+
+  <!-- Modal Detail Produk -->
+  <div id="detail-overlay" class="popup-overlay hidden">
+    <div class="popup-kartu detail-kartu">
+      <div class="popup-header">
+        <button id="btn-detail-back" class="btn-popup-back" title="Kembali">&larr;</button>
+        <h2>Detail Produk</h2>
+      </div>
+
+      <img id="detail-gambar" class="detail-gambar" src="" alt="">
+      <span id="detail-kategori" class="kategori-produk"></span>
+      <h3 id="detail-judul" class="detail-judul"></h3>
+      <p id="detail-brand" class="detail-brand"></p>
+      <p id="detail-harga" class="detail-harga"></p>
+      <p id="detail-stok" class="detail-stok"></p>
+      <p id="detail-deskripsi" class="detail-deskripsi"></p>
+      <button id="btn-detail-tambah" class="btn-terapkan">Tambah ke Keranjang</button>
     </div>
   </div>
 

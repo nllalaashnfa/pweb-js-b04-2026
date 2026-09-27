@@ -46,6 +46,26 @@ const selectHarga = document.getElementById("select-harga");
 const ratingTombolGrup = document.getElementById("rating-tombol-grup");
 const btnTerapkan = document.getElementById("btn-terapkan");
 
+const btnMuatLagi = document.getElementById("btn-muat-lagi");
+
+const btnKeranjang = document.getElementById("btn-keranjang");
+const badgeKeranjang = document.getElementById("badge-keranjang");
+const keranjangOverlay = document.getElementById("keranjang-overlay");
+const btnKeranjangBack = document.getElementById("btn-keranjang-back");
+const daftarKeranjangEl = document.getElementById("daftar-keranjang");
+const totalKeranjangHargaEl = document.getElementById("total-keranjang-harga");
+
+const detailOverlay = document.getElementById("detail-overlay");
+const btnDetailBack = document.getElementById("btn-detail-back");
+const detailGambar = document.getElementById("detail-gambar");
+const detailKategori = document.getElementById("detail-kategori");
+const detailJudul = document.getElementById("detail-judul");
+const detailBrand = document.getElementById("detail-brand");
+const detailHarga = document.getElementById("detail-harga");
+const detailStok = document.getElementById("detail-stok");
+const detailDeskripsi = document.getElementById("detail-deskripsi");
+const btnDetailTambah = document.getElementById("btn-detail-tambah");
+
 // ---------- State ----------
 let semuaProduk = [];
 let hasilTerfilter = [];
@@ -53,6 +73,12 @@ let kategoriAktif = "";
 let kataKunciCari = "";
 let urutanHarga = "";
 let ratingMinimum = null;
+
+const JUMLAH_PER_HALAMAN = 8;
+let hasilSaatIni = [];
+let jumlahDitampilkan = JUMLAH_PER_HALAMAN;
+
+const KUNCI_KERANJANG = "keranjang";
 
 // ============================================================
 // 0. Cek sesi login. Kalau tidak ada, balik ke halaman login.
@@ -156,7 +182,9 @@ function terapkanUrutanDanRating() {
     hasil.sort((a, b) => b.price - a.price);
   }
 
-  renderProduk(hasil);
+  hasilSaatIni = hasil;
+  jumlahDitampilkan = JUMLAH_PER_HALAMAN;
+  renderHalamanSaatIni();
 }
 
 // ============================================================
@@ -165,6 +193,7 @@ function terapkanUrutanDanRating() {
 function buatKartuProduk(produk) {
   const kartu = document.createElement("div");
   kartu.className = "kartu-produk";
+  kartu.dataset.id = produk.id;
 
   const diskon = produk.discountPercentage ? produk.discountPercentage.toFixed(2) : "0.00";
 
@@ -180,6 +209,7 @@ function buatKartuProduk(produk) {
         <span class="harga-produk">$${produk.price}</span>
         <span class="rating-produk"><span class="bintang">&#9733;</span> ${produk.rating}</span>
       </div>
+      <button class="btn-tambah-keranjang" title="Tambah ke Keranjang">+ Keranjang</button>
     </div>
   `;
 
@@ -208,6 +238,24 @@ function renderProduk(daftarProduk) {
   });
   productGrid.appendChild(fragment);
 }
+
+// ============================================================
+// 4b. Load More (array slicing atas hasilSaatIni)
+// ============================================================
+function renderHalamanSaatIni() {
+  renderProduk(hasilSaatIni.slice(0, jumlahDitampilkan));
+
+  if (jumlahDitampilkan >= hasilSaatIni.length) {
+    btnMuatLagi.classList.add("hidden");
+  } else {
+    btnMuatLagi.classList.remove("hidden");
+  }
+}
+
+btnMuatLagi.addEventListener("click", () => {
+  jumlahDitampilkan += JUMLAH_PER_HALAMAN;
+  renderHalamanSaatIni();
+});
 
 // ============================================================
 // 5. Tombol kembali ke tampilan produk lengkap
@@ -291,11 +339,149 @@ async function ambilProduk() {
 }
 
 // ============================================================
+// 8. Keranjang (Local Storage CRUD)
+// ============================================================
+function ambilKeranjang() {
+  const data = localStorage.getItem(KUNCI_KERANJANG);
+  return data ? JSON.parse(data) : [];
+}
+
+function simpanKeranjang(keranjang) {
+  if (keranjang.length === 0) {
+    localStorage.removeItem(KUNCI_KERANJANG);
+  } else {
+    localStorage.setItem(KUNCI_KERANJANG, JSON.stringify(keranjang));
+  }
+}
+
+function tambahKeKeranjang(id) {
+  const produk = semuaProduk.find((p) => p.id === id);
+  if (!produk) return;
+
+  const keranjang = ambilKeranjang();
+  const itemAda = keranjang.find((item) => item.id === id);
+
+  if (itemAda) {
+    itemAda.jumlah += 1;
+  } else {
+    keranjang.push({
+      id: produk.id,
+      judul: produk.title,
+      harga: produk.price,
+      gambar: produk.thumbnail,
+      jumlah: 1,
+    });
+  }
+
+  simpanKeranjang(keranjang);
+  perbaruiTampilanKeranjang();
+}
+
+function hapusDariKeranjang(id) {
+  const keranjang = ambilKeranjang().filter((item) => item.id !== id);
+  simpanKeranjang(keranjang);
+  perbaruiTampilanKeranjang();
+}
+
+function perbaruiTampilanKeranjang() {
+  const keranjang = ambilKeranjang();
+
+  const totalJumlah = keranjang.reduce((total, item) => total + item.jumlah, 0);
+  badgeKeranjang.textContent = totalJumlah;
+  badgeKeranjang.classList.toggle("hidden", totalJumlah === 0);
+
+  const totalHarga = keranjang.reduce((total, item) => total + item.harga * item.jumlah, 0);
+  totalKeranjangHargaEl.textContent = `$${totalHarga.toFixed(2)}`;
+
+  if (keranjang.length === 0) {
+    daftarKeranjangEl.innerHTML = "<p class='keranjang-kosong'>Keranjang masih kosong.</p>";
+    return;
+  }
+
+  daftarKeranjangEl.innerHTML = keranjang
+    .map(
+      (item) => `
+        <div class="item-keranjang" data-id="${item.id}">
+          <img src="${item.gambar}" alt="${item.judul}">
+          <div class="info-item-keranjang">
+            <span class="judul-item-keranjang">${item.judul}</span>
+            <span class="harga-item-keranjang">${item.jumlah} x $${item.harga}</span>
+          </div>
+          <button class="btn-hapus-item" title="Hapus">&times;</button>
+        </div>
+      `
+    )
+    .join("");
+}
+
+// Event delegation untuk tombol hapus item di dalam panel keranjang
+daftarKeranjangEl.addEventListener("click", (e) => {
+  const tombolHapus = e.target.closest(".btn-hapus-item");
+  if (!tombolHapus) return;
+  const id = Number(tombolHapus.closest(".item-keranjang").dataset.id);
+  hapusDariKeranjang(id);
+});
+
+btnKeranjang.addEventListener("click", () => {
+  keranjangOverlay.classList.remove("hidden");
+});
+
+btnKeranjangBack.addEventListener("click", () => {
+  keranjangOverlay.classList.add("hidden");
+});
+
+// ============================================================
+// 9. Modal Detail Produk (Event Delegation)
+// ============================================================
+function bukaDetailProduk(id) {
+  const produk = semuaProduk.find((p) => p.id === id);
+  if (!produk) return;
+
+  detailGambar.src = produk.thumbnail;
+  detailGambar.alt = produk.title;
+  detailKategori.textContent = produk.category;
+  detailJudul.textContent = produk.title;
+  detailBrand.textContent = produk.brand ? `Brand: ${produk.brand}` : "";
+  detailHarga.textContent = `$${produk.price}`;
+  detailStok.textContent = `Stok: ${produk.stock}`;
+  detailDeskripsi.textContent = produk.description;
+  btnDetailTambah.dataset.id = produk.id;
+
+  detailOverlay.classList.remove("hidden");
+}
+
+btnDetailBack.addEventListener("click", () => {
+  detailOverlay.classList.add("hidden");
+});
+
+btnDetailTambah.addEventListener("click", () => {
+  tambahKeKeranjang(Number(btnDetailTambah.dataset.id));
+  detailOverlay.classList.add("hidden");
+});
+
+// Satu listener untuk seluruh grid: menangani klik tombol "+ Keranjang"
+// maupun klik kartu (buka detail). Otomatis berlaku juga untuk kartu baru
+// yang muncul lewat "Muat Lebih Banyak", tanpa perlu addEventListener lagi.
+productGrid.addEventListener("click", (e) => {
+  const kartu = e.target.closest(".kartu-produk");
+  if (!kartu) return;
+  const id = Number(kartu.dataset.id);
+
+  if (e.target.closest(".btn-tambah-keranjang")) {
+    tambahKeKeranjang(id);
+    return;
+  }
+
+  bukaDetailProduk(id);
+});
+
+// ============================================================
 // Inisialisasi
 // ============================================================
 (function init() {
   const firstName = cekSesi();
   if (!firstName) return;
 
+  perbaruiTampilanKeranjang();
   ambilProduk();
 })();
